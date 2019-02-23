@@ -6,6 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!-- namespace：该mapper.xml映射文件的唯一标识 -->
 <mapper namespace="com.phserv.mapper.ClassesMapper">
 
+	<!-- 获取所有班级记录 -->
 	<select id="queryAllClasses" resultType="Classes">
 		select * from t_class
 	</select>
