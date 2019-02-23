@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace：该mapper.xml映射文件的唯一标识 -->
+<mapper namespace="com.phserv.mapper.ClassesMapper">
+
+	<select id="queryAllClasses" resultType="Classes">
+		select * from t_class
+	</select>
+	
+	<!-- 报表查询 -->
+	<select id="queryChart" resultType="ClassesChart">
+		SELECT count(s.classid) s_count,c.class_name subject from t_student s INNER JOIN t_class c 
+		on s.classid = c.id
+		GROUP BY subject;
+	</select>
+
+</mapper>

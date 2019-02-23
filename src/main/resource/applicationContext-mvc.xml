@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	<!-- 扫描controller -->
+	<context:component-scan base-package="com.phserv.controller">
+	</context:component-scan>
+	
+	
+	<!-- 视图编辑器 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/views/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+	
+	<!-- 对注解的支持 -->
+	<mvc:annotation-driven></mvc:annotation-driven>
+	
+	<!-- 该注解会让springMVC接收到一个请求却没有对应的resultMapping时，
+		将请求交给Tomcat服务器默认的Servlet进行处理（直接访问）
+		主要用于访问静态资源
+	 -->
+	<mvc:default-servlet-handler/>
+	
+	<!-- 上传的解析器 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 默认编码 -->
+		<property name="defaultEncoding" value="UTF-8"></property>
+		<!-- 限制一次上传最大限制为200mb -->
+		<property name="maxUploadSize" value="209715200"></property>
+	</bean>
+	
+</beans>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<!-- 配置扫描器扫描业务类 -->
+	<context:component-scan base-package="com.phserv.service">
+	</context:component-scan>
+	
+	<!-- 通过PreferencesPlaceholderConfigurerbean导入db.properties 
+	<bean id="config" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+		<property name="locations">
+			<array>
+				<value>classpath:db.properties</value>
+			</array>
+		</property>
+	</bean>
+	-->
+	<!-- PreferencesPlaceholderConfigurer的简单配置方法，注意此注解一个配置里只能存在一个-->
+	<context:property-placeholder location="classpath:db.properties"/> 
+
+	<!-- 配置数据库信息（替代MyBatis的配置文件conf.xml）  -->
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="driverClassName" value="${db.driver}"></property>
+		<property name="url" value="${db.url}"></property>
+		<property name="username" value="${db.username}"></property>
+		<property name="password" value="${db.password}"></property>
+	</bean>
+	
+	<!-- 在springioc容器中创建MyBatis的核心类SQLSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<!-- 加载MyBatis配置文件 
+		<property name="configLocation" value="classpath:conf.xml"></property>
+		-->
+		<!-- 加载mapper.xml映射文件 -->
+		<property name="mapperLocations" value="classpath:com/phserv/mapper/*.xml"></property>
+		<property name="typeAliasesPackage" value="com.phserv.entity"></property>
+		<property name="typeHandlersPackage" value="con.phserv.converter"></property>
+	</bean>
+	
+		<!-- 第三种生成mapper对象
+		批量产生Mapper对在springIOC中的id值默认就是接口名
+		本质是MyBatis将SQLSessionFactory交给spring
+	 -->
+	<bean id="StudentMapper" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+		<!-- 指定批量产生哪个包中的mapper对象 ,多个包之间用逗号隔开-->
+		<property name="basePackage" value="com.phserv.mapper"></property>
+	</bean>
+	
+
+</beans>
